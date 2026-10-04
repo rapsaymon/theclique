@@ -3,732 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Clique - Watch Anime & Movies Free</title>
+    <title>The Clique - Stream Anime & Movies Free</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg: #0a0a0a;
-            --color-surface: #141414;
-            --color-primary: #e50914;
+            --bg-main: #0b0f17;
+            --bg-surface: #131926;
+            --bg-card: #1a2234;
+            --accent: #e50914;
+            --accent-hover: #ff1e27;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass: rgba(19, 25, 38, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         body {
-            background-color: var(--color-bg);
-            color: #ffffff;
-            line-height: 1.6;
-            min-width: 1024px;
-        }
-
-        .desktop-container {
-            max-width: 1800px;
-            margin: 0 auto;
-            padding: 0 60px;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .nav-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 70px;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--color-primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 20px;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-link.active, .nav-link:hover {
-            color: white;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .search-box {
-            position: relative;
-            width: 360px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            pointer-events: none;
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: var(--color-primary);
-            color: white;
-            font-size: 11px;
-            font-weight: 700;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 70vh;
-            min-height: 500px;
-            margin-top: 70px;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.6) 40%, rgba(10,10,10,0.2) 100%);
-            background-size: cover;
-            background-position: center top;
-            transition: background-image 0.3s ease;
-        }
-
-        .hero-content {
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .hero-title {
-            font-size: 56px;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 16px;
-            max-width: 900px;
-        }
-
-        .hero-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .hero-badge {
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .hero-desc {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 600px;
-            margin-bottom: 24px;
-        }
-
-        /* Section */
-        .section {
-            padding: 30px 0;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        /* Grids */
-        .anime-grid, .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .movie-card {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s;
-            background: var(--color-surface);
-            cursor: pointer;
-        }
-
-        .movie-card:hover {
-            transform: scale(1.04);
-            z-index: 10;
-        }
-
-        .card-image-wrapper {
-            position: relative;
-            aspect-ratio: 2/3;
-            overflow: hidden;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .play-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .movie-card:hover .play-overlay {
-            opacity: 1;
-        }
-
-        .play-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--color-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-actions {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 30;
-        }
-
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
-            transform: scale(1.1);
-        }
-
-        .card-info {
-            padding: 12px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            z-index: 20;
-        }
-
-        .card-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-        }
-
-        .card-genre {
-            display: inline-block;
-            padding: 2px 8px;
-            background: rgba(229, 9, 20, 0.8);
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* Modal Player */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-container {
-            width: 90%;
-            max-width: 960px;
-            background: var(--color-surface);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            background: #000;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .modal-details {
-            padding: 24px;
-        }
-
-        .modal-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .modal-desc {
-            color: rgba(255,255,255,0.8);
-            font-size: 15px;
-            margin-top: 12px;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
             line-height: 1.5;
         }
 
-        /* Sidebar */
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 90;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
+        /* Glassmorphism Header */
+        .glass-header {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
+        /* Hero Image Overlay */
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(11,15,23,0.3) 0%, rgba(11,15,23,0.8) 60%, var(--bg-main) 100%),
+                        linear-gradient(90deg, rgba(11,15,23,0.9) 0%, rgba(11,15,23,0.4) 50%, rgba(11,15,23,0.8) 100%);
         }
 
-        .watchlist-sidebar {
-            position: fixed;
-            top: 0;
-            right: -450px;
-            width: 450px;
-            height: 100vh;
-            background: var(--color-surface);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            z-index: 95;
-            transition: right 0.3s;
-            padding: 90px 24px 24px;
-            overflow-y: auto;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-
-        .watchlist-sidebar.active {
-            right: 0;
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
         }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .sidebar-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .close-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .watchlist-item {
-            display: flex;
-            gap: 16px;
-            padding: 12px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            align-items: center;
-        }
-
-        .watchlist-thumb {
-            width: 60px;
-            height: 90px;
+        ::-webkit-scrollbar-thumb {
+            background: #2a354d;
             border-radius: 4px;
-            object-fit: cover;
-            flex-shrink: 0;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
         }
 
-        .watchlist-info {
-            flex: 1;
-            min-width: 0;
+        /* Card Hover Effects */
+        .media-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .watchlist-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .media-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
         }
-
-        .remove-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            color: rgba(255,255,255,0.4);
-            cursor: pointer;
-        }
-
-        .remove-btn:hover {
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255,255,255,0.95);
-            color: black;
-            padding: 14px 20px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 200;
-            font-weight: 600;
-        }
-
-        .toast.show {
-            transform: translateY(0);
+        .media-card:hover .card-overlay {
             opacity: 1;
         }
 
-        .hidden {
-            display: none !important;
+        /* Video Container */
+        .video-aspect {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .video-aspect iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
-        .category-filter {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .category-btn {
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            color: rgba(255,255,255,0.8);
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .category-btn:hover, .category-btn.active {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
-            color: white;
+        /* Category Active Glow */
+        .category-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+            border-color: var(--accent);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <!-- Navigation -->
-    <nav>
-        <div class="desktop-container nav-content">
-            <div class="nav-left">
-                <a href="#" class="logo">
-                    <div class="logo-icon">C</div>
-                    <span class="logo-text">The Clique</span>
-                </a>
-                <div class="nav-links">
-                    <span class="nav-link active" id="animeTab" onclick="switchSection('anime')">Anime</span>
-                    <span class="nav-link" id="moviesTab" onclick="switchSection('movies')">Movies</span>
-                </div>
-            </div>
-            
-            <div class="nav-right">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="Search TMDB movies & anime..." id="searchInput">
-                    <svg class="search-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </div>
+    <!-- Navigation Bar -->
+    <nav class="glass-header fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
                 
-                <button class="icon-btn" onclick="toggleWatchlist()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                    </svg>
-                    <span class="badge hidden" id="watchlistCount">0</span>
-                </button>
+                <!-- Left: Logo & Navigation Tabs -->
+                <div class="flex items-center gap-8">
+                    <a href="#" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-700 to-red-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-red-900/40 group-hover:scale-105 transition-transform">
+                            C
+                        </div>
+                        <span class="text-2xl font-extrabold tracking-tight text-white group-hover:text-red-500 transition-colors">The Clique</span>
+                    </a>
+
+                    <div class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-white/5">
+                        <button id="animeTab" onclick="switchSection('anime')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md">Anime</button>
+                        <button id="moviesTab" onclick="switchSection('movies')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white">Movies</button>
+                    </div>
+                </div>
+
+                <!-- Right: Search & Watchlist -->
+                <div class="flex items-center gap-4">
+                    <div class="relative w-48 sm:w-72">
+                        <input type="text" id="searchInput" placeholder="Search movies, anime..." class="w-full bg-slate-900/80 border border-slate-700/60 focus:border-red-500 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+
+                    <button onclick="toggleWatchlist()" class="relative p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/60 text-slate-200 hover:text-white hover:border-slate-500 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        <span id="watchlistCount" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                    </button>
+                </div>
+
             </div>
         </div>
     </nav>
 
-    <!-- Watchlist Sidebar -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleWatchlist()"></div>
-    <aside class="watchlist-sidebar" id="watchlistSidebar">
-        <div class="sidebar-header">
-            <h2 class="sidebar-title">My Watchlist</h2>
-            <button class="close-btn" onclick="toggleWatchlist()">✕</button>
+    <!-- Watchlist Slide-over Drawer -->
+    <div id="sidebarOverlay" onclick="toggleWatchlist()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="watchlistSidebar" class="fixed top-0 right-0 w-full sm:w-96 h-full bg-slate-900 border-l border-white/10 z-50 translate-x-full transition-transform duration-300 ease-out flex flex-col">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                My Watchlist
+            </h2>
+            <button onclick="toggleWatchlist()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">✕</button>
         </div>
-        <div id="watchlistContent"></div>
+        <div id="watchlistContent" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Watchlist Items Render Here -->
+        </div>
     </aside>
 
-    <!-- Video Embed Modal -->
-    <div class="modal-overlay" id="mediaModal">
-        <div class="modal-container">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div class="video-container" id="videoBox">
-                <div class="flex items-center justify-center h-full text-gray-400">Loading Video Player...</div>
+    <!-- Video & Info Modal -->
+    <div id="mediaModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl relative transform transition-all">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-red-600 transition-colors">✕</button>
+            <div id="videoBox" class="video-aspect bg-black">
+                <div class="flex items-center justify-center h-full text-slate-500 font-medium">Loading Player...</div>
             </div>
-            <div class="modal-details">
-                <div class="modal-title" id="modalTitle">Title</div>
-                <div id="modalMeta" class="text-sm text-gray-400 flex gap-4"></div>
-                <div class="modal-desc" id="modalDesc">Overview description goes here...</div>
+            <div class="p-6 sm:p-8">
+                <h3 id="modalTitle" class="text-2xl sm:text-3xl font-extrabold text-white mb-2">Title</h3>
+                <div id="modalMeta" class="flex items-center gap-4 text-sm font-semibold text-slate-400 mb-4"></div>
+                <p id="modalDesc" class="text-slate-300 text-sm sm:text-base leading-relaxed line-clamp-4">Overview description goes here...</p>
             </div>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="heroSection">
-        <div class="hero-bg" id="heroBg"></div>
-        <div class="desktop-container hero-content">
-            <div class="hero-title" id="heroTitle">Featured Movie</div>
-            <div class="hero-meta">
-                <span class="hero-badge" id="heroBadge">2026</span>
-                <span id="heroMeta">TMDB API Featured</span>
-            </div>
-            <p class="hero-desc" id="heroDesc">Explore thousands of movies dynamically retrieved via the official TMDB API.</p>
+    <!-- Hero Header Banner -->
+    <header id="heroSection" class="relative w-full min-h-[550px] sm:min-h-[650px] flex items-end pt-20">
+        <div id="heroBg" class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700">
+            <div class="absolute inset-0 hero-gradient"></div>
         </div>
-    </section>
-
-    <!-- Anime Main Section -->
-    <main class="desktop-container" id="anime-section">
-        <section class="section">
-            <div class="section-header">
-                <h2 class="section-title" id="animeHeader">Trending Anime</h2>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-16 relative z-10">
+            <div class="max-w-2xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <span id="heroBadge" class="bg-red-600/90 text-white px-3 py-1 rounded-md text-xs font-bold tracking-wide uppercase">2026</span>
+                    <span id="heroMeta" class="text-xs font-semibold text-slate-300 tracking-wider">TMDB API Featured</span>
+                </div>
+                <h1 id="heroTitle" class="text-4xl sm:text-6xl font-black text-white leading-tight mb-4 tracking-tight drop-shadow-md">Featured Title</h1>
+                <p id="heroDesc" class="text-slate-300 text-sm sm:text-lg mb-6 line-clamp-3 leading-relaxed font-normal">Explore thousands of movies dynamically retrieved via the official TMDB API.</p>
             </div>
-            <div class="anime-grid" id="animeTrendingGrid"></div>
-        </section>
-        <section class="section" id="animePopularSection">
-            <div class="section-header">
-                <h2 class="section-title">Popular Anime</h2>
-            </div>
-            <div class="anime-grid" id="animePopularGrid"></div>
-        </section>
-    </main>
+        </div>
+    </header>
 
-    <!-- Movie Section -->
-    <main class="desktop-container hidden" id="movie-section">
-        <section class="section" id="movieCategorySection">
-            <div class="category-filter">
-                <button class="category-btn active" onclick="filterMovieGenre('all', event)">All</button>
-                <button class="category-btn" onclick="filterMovieGenre('28', event)">Action</button>
-                <button class="category-btn" onclick="filterMovieGenre('35', event)">Comedy</button>
-                <button class="category-btn" onclick="filterMovieGenre('18', event)">Drama</button>
-                <button class="category-btn" onclick="filterMovieGenre('878', event)">Sci-Fi</button>
-                <button class="category-btn" onclick="filterMovieGenre('27', event)">Horror</button>
-            </div>
-        </section>
+    <!-- Main Section Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-8 space-y-12">
 
-        <section class="section">
-            <div class="section-header"><h2 class="section-title" id="movieHeader">Trending Movies</h2></div>
-            <div class="movie-grid" id="movieTrendingGrid"></div>
-        </section>
+        <!-- Anime Section -->
+        <main id="anime-section" class="space-y-12">
+            <section>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 id="animeHeader" class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Trending Anime
+                    </h2>
+                </div>
+                <div id="animeTrendingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
 
-        <section class="section movie-extra-section">
-            <div class="section-header"><h2 class="section-title">Popular Movies</h2></div>
-            <div class="movie-grid" id="moviePopularGrid"></div>
-        </section>
+            <section id="animePopularSection">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Popular Anime
+                    </h2>
+                </div>
+                <div id="animePopularGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
+        </main>
 
-        <section class="section movie-extra-section">
-            <div class="section-header"><h2 class="section-title">Pinoy Movies</h2></div>
-            <div class="movie-grid" id="moviePinoyGrid"></div>
-        </section>
+        <!-- Movie Section -->
+        <main id="movie-section" class="space-y-12 hidden">
+            <!-- Genre Filter Pills -->
+            <section id="movieCategorySection">
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                    <button onclick="filterMovieGenre('all', event)" class="category-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">All</button>
+                    <button onclick="filterMovieGenre('28', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Action</button>
+                    <button onclick="filterMovieGenre('35', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Comedy</button>
+                    <button onclick="filterMovieGenre('18', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Drama</button>
+                    <button onclick="filterMovieGenre('878', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Sci-Fi</button>
+                    <button onclick="filterMovieGenre('27', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Horror</button>
+                </div>
+            </section>
 
-        <section class="section movie-extra-section">
-            <div class="section-header"><h2 class="section-title">Horror Movies</h2></div>
-            <div class="movie-grid" id="movieHorrorGrid"></div>
-        </section>
-    </main>
+            <section>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 id="movieHeader" class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Trending Movies
+                    </h2>
+                </div>
+                <div id="movieTrendingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-        <span id="toastMessage">Action completed</span>
+            <section class="movie-extra-section">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Popular Movies
+                    </h2>
+                </div>
+                <div id="moviePopularGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
+
+            <section class="movie-extra-section">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Pinoy Movies
+                    </h2>
+                </div>
+                <div id="moviePinoyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
+
+            <section class="movie-extra-section">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
+                        Horror Movies
+                    </h2>
+                </div>
+                <div id="movieHorrorGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </section>
+        </main>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span id="toastMessage" class="text-sm font-semibold">Action completed</span>
     </div>
 
     <script>
@@ -748,19 +290,23 @@
 
         function switchSection(section) {
             currentSection = section;
-            document.getElementById('animeTab').classList.toggle('active', section === 'anime');
-            document.getElementById('moviesTab').classList.toggle('active', section === 'movies');
-            document.getElementById('searchInput').value = '';
-
+            const animeBtn = document.getElementById('animeTab');
+            const moviesBtn = document.getElementById('moviesTab');
+            
             if (section === 'anime') {
+                animeBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md";
+                moviesBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
                 document.getElementById('anime-section').classList.remove('hidden');
                 document.getElementById('movie-section').classList.add('hidden');
                 resetAnimeGrids();
             } else {
+                moviesBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md";
+                animeBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
                 document.getElementById('anime-section').classList.add('hidden');
                 document.getElementById('movie-section').classList.remove('hidden');
                 resetMovieGrids();
             }
+            document.getElementById('searchInput').value = '';
         }
 
         async function fetchTMDB(endpoint, params = '') {
@@ -834,26 +380,30 @@
             const actualType = item.media_type || type;
 
             return `
-                <div class="movie-card" onclick="openMediaModal(${item.id}, '${actualType}')">
-                    <div class="card-image-wrapper">
-                        <img src="${poster}" alt="${title}" class="card-image" loading="lazy">
-                        <div class="play-overlay">
-                            <div class="play-icon">
-                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="media-card group relative bg-slate-800/80 rounded-2xl overflow-hidden cursor-pointer border border-slate-700/50 hover:border-red-500/50" onclick="openMediaModal(${item.id}, '${actualType}')">
+                    <div class="aspect-[2/3] w-full overflow-hidden relative">
+                        <img src="${poster}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        
+                        <!-- Overlay on Hover -->
+                        <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-between p-4">
+                            <div class="flex justify-end">
+                                <button class="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-red-600 transition-colors" onclick="event.stopPropagation(); toggleWatchlistItems(${item.id}, '${safeTitle}', '${poster}')">
+                                    <svg class="w-4 h-4" fill="${inWatchlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                                    </svg>
+                                </button>
                             </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="action-btn" onclick="event.stopPropagation(); toggleWatchlistItems(${item.id}, '${safeTitle}', '${poster}')">
-                                <svg class="w-5 h-5" fill="${inWatchlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="card-info">
-                            <div class="card-title">${title}</div>
-                            <div class="card-meta">
-                                <span class="card-genre">${actualType.toUpperCase()}</span>
-                                <span>${year}</span>
+
+                            <div class="flex justify-center items-center my-auto">
+                                <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                                    <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="inline-block px-2 py-0.5 bg-red-600/90 text-white text-[10px] font-bold rounded uppercase mb-1">${actualType}</span>
+                                <h4 class="text-sm font-bold text-white truncate">${title}</h4>
+                                <p class="text-xs text-slate-400 font-medium">${year}</p>
                             </div>
                         </div>
                     </div>
@@ -870,8 +420,8 @@
 
             const mediaType = (type === 'tv' || type === 'anime') ? 'tv' : 'movie';
 
-            modal.classList.add('active');
-            videoBox.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Loading Video Player...</div>';
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            videoBox.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 font-medium">Loading Player...</div>';
 
             const details = await fetchTMDB(`/${mediaType}/${id}`);
 
@@ -879,25 +429,21 @@
                 title.textContent = details.title || details.name;
                 desc.textContent = details.overview || "No overview available.";
                 meta.innerHTML = `
-                    <span>Rating: ⭐ ${details.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>
-                    <span>Release: ${details.release_date || details.first_air_date || 'N/A'}</span>
+                    <span class="text-amber-400 flex items-center gap-1">★ ${details.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>
+                    <span>•</span>
+                    <span>${details.release_date || details.first_air_date || 'N/A'}</span>
                 `;
             }
 
-            // Generate full video embed link via Vidfast API[cite: 2]
-            let embedUrl = "";
-            if (mediaType === 'movie') {
-                embedUrl = `https://vidfast.vc/movie/${id}?autoPlay=true`;
-            } else {
-                embedUrl = `https://vidfast.vc/tv/${id}/1/1?autoPlay=true`;
-            }
+            let embedUrl = mediaType === 'movie' ? `https://vidfast.vc/movie/${id}?autoPlay=true` : `https://vidfast.vc/tv/${id}/1/1?autoPlay=true`;
 
             videoBox.innerHTML = `
                 <iframe 
                     src="${embedUrl}" 
                     frameborder="0" 
                     allow="autoplay; encrypted-media; fullscreen" 
-                    allowfullscreen>
+                    allowfullscreen
+                    class="rounded-t-2xl">
                 </iframe>
             `;
         }
@@ -905,7 +451,7 @@
         function closeModal() {
             const modal = document.getElementById('mediaModal');
             const videoBox = document.getElementById('videoBox');
-            modal.classList.remove('active');
+            modal.classList.add('opacity-0', 'pointer-events-none');
             videoBox.innerHTML = '';
         }
 
@@ -993,15 +539,15 @@
 
             if(content) {
                 if (watchlist.length === 0) {
-                    content.innerHTML = `<p style="text-align:center; padding: 20px; color: grey;">Your watchlist is empty.</p>`;
+                    content.innerHTML = `<div class="text-center py-12 text-slate-500 font-medium">Your watchlist is empty.</div>`;
                 } else {
                     content.innerHTML = watchlist.map(item => `
-                        <div class="watchlist-item">
-                            <img src="${item.image}" class="watchlist-thumb" alt="${item.title}">
-                            <div class="watchlist-info">
-                                <div class="watchlist-title">${item.title}</div>
+                        <div class="flex items-center gap-4 bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                            <img src="${item.image}" class="w-12 h-16 object-cover rounded-lg flex-shrink-0" alt="${item.title}">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-semibold text-white truncate">${item.title}</h4>
                             </div>
-                            <button class="remove-btn" onclick="toggleWatchlistItems(${item.id})">✕</button>
+                            <button onclick="toggleWatchlistItems(${item.id})" class="p-2 text-slate-400 hover:text-red-500 transition-colors">✕</button>
                         </div>
                     `).join('');
                 }
@@ -1009,16 +555,22 @@
         }
 
         function toggleWatchlist() {
-            document.getElementById('watchlistSidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
+            const sidebar = document.getElementById('watchlistSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('translate-x-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             if(toast) {
                 document.getElementById('toastMessage').textContent = message;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 3000);
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
             }
         }
     </script>
