@@ -191,7 +191,7 @@
                     <div id="modalMeta" class="flex items-center gap-4 text-sm font-semibold text-slate-400"></div>
                 </div>
 
-                <!-- Anime Player Options (SUB / DUB + Season + Episode Pills) -->
+                <!-- Anime Player Options -->
                 <div id="animeControls" class="hidden bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-xl backdrop-blur-md space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
                         <div class="flex items-center gap-2">
@@ -225,7 +225,7 @@
                     </div>
                 </div>
 
-                <!-- Regular Live Action TV Controls -->
+                <!-- Regular Live-Action TV Controls -->
                 <div id="seriesControls" class="hidden bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl space-y-3">
                     <h4 class="text-sm font-bold text-red-400 tracking-wider uppercase">Episode Selector</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -536,7 +536,19 @@
             currentMediaId = id;
             modal.classList.remove('opacity-0', 'pointer-events-none');
 
-            // Fetch details for TV series or Movies
+            // Explicit Movie Handling (standard movies)
+            if (type === 'movie') {
+                animeControls.classList.add('hidden');
+                seriesControls.classList.add('hidden');
+                const details = await fetchTMDB(`/movie/${id}`);
+                document.getElementById('modalTitle').textContent = details?.title || "Movie";
+                document.getElementById('modalDesc').textContent = details?.overview || "No description available.";
+                document.getElementById('modalMeta').innerHTML = `<span>Rating: ⭐ ${details?.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>`;
+                loadMoviePlayer(id);
+                return;
+            }
+
+            // Fetch details for TV series or Anime Movies
             let details = await fetchTMDB(`/tv/${id}`);
             let isTvSeries = true;
 
@@ -545,7 +557,6 @@
                 isTvSeries = false;
             }
 
-            // Check if item is Animation (Genre ID 16) or forced as anime type
             const genreIds = details?.genres ? details.genres.map(g => g.id) : (details?.genre_ids || []);
             const isAnime = type === 'anime' || genreIds.includes(16);
 
@@ -565,12 +576,12 @@
                 const episodeSelectBox = document.getElementById('animeEpisodeBox');
 
                 if (!isTvSeries) {
-                    // Movie Anime
+                    // Anime Movie (e.g. Infinity Castle, Mugen Train) - Hide season/episode selectors
                     isAnimeMovie = true;
                     seasonSelectBox.classList.add('hidden');
                     episodeSelectBox.classList.add('hidden');
                 } else {
-                    // TV Anime Series (Demon Slayer, Jujutsu Kaisen, etc.)
+                    // Anime TV Series (e.g. Demon Slayer TV) - Show season/episode selectors
                     isAnimeMovie = false;
                     seasonSelectBox.classList.remove('hidden');
                     episodeSelectBox.classList.remove('hidden');
@@ -592,6 +603,7 @@
 
                 updateAnimePlayer();
             } else if (type === 'tv' || isTvSeries) {
+                // Live-Action TV Series
                 animeControls.classList.add('hidden');
                 seriesControls.classList.remove('hidden');
                 document.getElementById('modalTitle').textContent = details?.name || "TV Series";
@@ -599,6 +611,7 @@
                 document.getElementById('modalMeta').innerHTML = `<span>Rating: ⭐ ${details?.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>`;
                 populateSeasons(details?.seasons || []);
             } else {
+                // Standard Movie Fallback
                 animeControls.classList.add('hidden');
                 seriesControls.classList.add('hidden');
                 document.getElementById('modalTitle').textContent = details?.title || "Movie";
