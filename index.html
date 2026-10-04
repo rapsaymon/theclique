@@ -3,19 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Clique - Stream Anime & Movies Free</title>
+    <title>The Clique - Stream Movies & Anime Free</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-main: #0b0f17;
             --bg-surface: #131926;
-            --bg-card: #1a2234;
             --accent: #e50914;
-            --accent-hover: #ff1e27;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass: rgba(19, 25, 38, 0.75);
+            --glass: rgba(19, 25, 38, 0.85);
             --glass-border: rgba(255, 255, 255, 0.08);
         }
 
@@ -28,12 +24,10 @@
 
         body {
             background-color: var(--bg-main);
-            color: var(--text-main);
+            color: #f8fafc;
             overflow-x: hidden;
-            line-height: 1.5;
         }
 
-        /* Glassmorphism Header */
         .glass-header {
             background: var(--glass);
             backdrop-filter: blur(16px);
@@ -41,41 +35,86 @@
             border-bottom: 1px solid var(--glass-border);
         }
 
-        /* Hero Image Overlay */
         .hero-gradient {
-            background: linear-gradient(180deg, rgba(11,15,23,0.3) 0%, rgba(11,15,23,0.8) 60%, var(--bg-main) 100%),
+            background: linear-gradient(180deg, rgba(11,15,23,0.2) 0%, rgba(11,15,23,0.8) 70%, var(--bg-main) 100%),
                         linear-gradient(90deg, rgba(11,15,23,0.9) 0%, rgba(11,15,23,0.4) 50%, rgba(11,15,23,0.8) 100%);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-main);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2a354d;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
+        /* Carousel Row Container & Buttons */
+        .carousel-wrapper {
+            position: relative;
         }
 
-        /* Card Hover Effects */
-        .media-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .carousel-row {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 12px 0 24px 0;
         }
-        .media-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+
+        /* Visible styled horizontal scrollbar */
+        .carousel-row::-webkit-scrollbar {
+            height: 6px;
         }
-        .media-card:hover .card-overlay {
+        .carousel-row::-webkit-scrollbar-track {
+            background: #131926;
+            border-radius: 4px;
+        }
+        .carousel-row::-webkit-scrollbar-thumb {
+            background: #e50914;
+            border-radius: 4px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 30;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.8;
+        }
+        .carousel-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            opacity: 1;
+            scale: 1.1;
+        }
+        .carousel-btn.left { left: -18px; }
+        .carousel-btn.right { right: -18px; }
+
+        .netflix-card {
+            flex: 0 0 calc(20% - 13px);
+            min-width: 170px;
+            position: relative;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        @media (max-width: 1024px) { .netflix-card { flex: 0 0 calc(25% - 12px); } }
+        @media (max-width: 768px) { .netflix-card { flex: 0 0 calc(33.333% - 11px); } }
+        @media (max-width: 480px) { .netflix-card { flex: 0 0 calc(50% - 8px); } }
+
+        .netflix-card:hover {
+            transform: scale(1.08) translateY(-4px);
+            z-index: 20;
+            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.7);
+        }
+
+        .netflix-card:hover .card-overlay {
             opacity: 1;
         }
 
-        /* Video Container */
         .video-aspect {
             position: relative;
             padding-bottom: 56.25%;
@@ -89,11 +128,9 @@
             height: 100%;
         }
 
-        /* Category Active Glow */
         .category-btn.active {
             background-color: var(--accent);
             color: #ffffff;
-            box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
             border-color: var(--accent);
         }
     </style>
@@ -101,176 +138,161 @@
 <body class="min-h-screen flex flex-col">
 
     <!-- Navigation Bar -->
-    <nav class="glass-header fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="glass-header fixed top-0 left-0 right-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                
-                <!-- Left: Logo & Navigation Tabs -->
-                <div class="flex items-center gap-8">
-                    <a href="#" class="flex items-center gap-3 group">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-700 to-red-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-red-900/40 group-hover:scale-105 transition-transform">
-                            C
-                        </div>
-                        <span class="text-2xl font-extrabold tracking-tight text-white group-hover:text-red-500 transition-colors">The Clique</span>
-                    </a>
-
-                    <div class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-white/5">
-                        <button id="animeTab" onclick="switchSection('anime')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md">Anime</button>
-                        <button id="moviesTab" onclick="switchSection('movies')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white">Movies</button>
+                <a href="#" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-700 to-red-500 flex items-center justify-center font-black text-xl text-white shadow-lg">
+                        C
                     </div>
-                </div>
+                    <span class="text-2xl font-extrabold text-white">The Clique</span>
+                </a>
 
-                <!-- Right: Search & Watchlist -->
                 <div class="flex items-center gap-4">
                     <div class="relative w-48 sm:w-72">
-                        <input type="text" id="searchInput" placeholder="Search movies, anime..." class="w-full bg-slate-900/80 border border-slate-700/60 focus:border-red-500 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all">
+                        <input type="text" id="searchInput" placeholder="Search movies, anime..." class="w-full bg-slate-900 border border-slate-700/60 focus:border-red-500 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:outline-none">
                         <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
 
-                    <button onclick="toggleWatchlist()" class="relative p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/60 text-slate-200 hover:text-white hover:border-slate-500 transition-all">
+                    <button onclick="toggleWatchlist()" class="relative p-2.5 rounded-xl bg-slate-900 border border-slate-700/60 text-slate-200 hover:text-white cursor-pointer">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-                        <span id="watchlistCount" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                        <span id="watchlistCount" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
                     </button>
                 </div>
-
             </div>
         </div>
     </nav>
 
-    <!-- Watchlist Slide-over Drawer -->
+    <!-- Watchlist Sidebar -->
     <div id="sidebarOverlay" onclick="toggleWatchlist()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
     <aside id="watchlistSidebar" class="fixed top-0 right-0 w-full sm:w-96 h-full bg-slate-900 border-l border-white/10 z-50 translate-x-full transition-transform duration-300 ease-out flex flex-col">
         <div class="p-6 border-b border-white/10 flex items-center justify-between">
-            <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-                My Watchlist
-            </h2>
-            <button onclick="toggleWatchlist()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">✕</button>
+            <h2 class="text-xl font-bold text-white">My Watchlist</h2>
+            <button onclick="toggleWatchlist()" class="p-2 text-slate-400 hover:text-white rounded-lg">✕</button>
         </div>
-        <div id="watchlistContent" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <!-- Watchlist Items Render Here -->
-        </div>
+        <div id="watchlistContent" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
     </aside>
 
-    <!-- Video & Info Modal -->
+    <!-- Player Modal -->
     <div id="mediaModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl relative transform transition-all">
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-red-600 transition-colors">✕</button>
-            <div id="videoBox" class="video-aspect bg-black">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-red-600 transition-colors cursor-pointer">✕</button>
+            
+            <div id="videoBox" class="video-aspect bg-black flex-shrink-0">
                 <div class="flex items-center justify-center h-full text-slate-500 font-medium">Loading Player...</div>
             </div>
-            <div class="p-6 sm:p-8">
-                <h3 id="modalTitle" class="text-2xl sm:text-3xl font-extrabold text-white mb-2">Title</h3>
-                <div id="modalMeta" class="flex items-center gap-4 text-sm font-semibold text-slate-400 mb-4"></div>
-                <p id="modalDesc" class="text-slate-300 text-sm sm:text-base leading-relaxed line-clamp-4">Overview description goes here...</p>
+
+            <div class="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6">
+                <div>
+                    <h3 id="modalTitle" class="text-2xl sm:text-3xl font-extrabold text-white mb-2">Title</h3>
+                    <div id="modalMeta" class="flex items-center gap-4 text-sm font-semibold text-slate-400"></div>
+                </div>
+
+                <div id="seriesControls" class="hidden bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl space-y-3">
+                    <h4 class="text-sm font-bold text-red-400 tracking-wider uppercase">Episode Selector</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Season</label>
+                            <select id="seasonSelect" class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg p-2.5 outline-none" onchange="onSeasonChange()"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Episode</label>
+                            <select id="episodeSelect" class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg p-2.5 outline-none" onchange="updatePlayerEpisode()"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="modalDesc" class="text-slate-300 text-sm sm:text-base leading-relaxed">Overview description goes here...</p>
             </div>
         </div>
     </div>
 
     <!-- Hero Header Banner -->
-    <header id="heroSection" class="relative w-full min-h-[550px] sm:min-h-[650px] flex items-end pt-20">
-        <div id="heroBg" class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700">
+    <header id="heroSection" class="relative w-full min-h-[450px] sm:min-h-[550px] flex items-end pt-20">
+        <div id="heroBg" class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 bg-slate-900">
             <div class="absolute inset-0 hero-gradient"></div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-16 relative z-10">
-            <div class="max-w-2xl">
-                <div class="flex items-center gap-3 mb-3">
-                    <span id="heroBadge" class="bg-red-600/90 text-white px-3 py-1 rounded-md text-xs font-bold tracking-wide uppercase">2026</span>
-                    <span id="heroMeta" class="text-xs font-semibold text-slate-300 tracking-wider">TMDB API Featured</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 relative z-10">
+            <div class="max-w-2xl space-y-3">
+                <div class="flex items-center gap-3">
+                    <span id="heroBadge" class="bg-red-600 text-white px-3 py-1 rounded-md text-xs font-bold uppercase">2026</span>
+                    <span id="heroMeta" class="text-xs font-semibold text-slate-300">TMDB Featured</span>
                 </div>
-                <h1 id="heroTitle" class="text-4xl sm:text-6xl font-black text-white leading-tight mb-4 tracking-tight drop-shadow-md">Featured Title</h1>
-                <p id="heroDesc" class="text-slate-300 text-sm sm:text-lg mb-6 line-clamp-3 leading-relaxed font-normal">Explore thousands of movies dynamically retrieved via the official TMDB API.</p>
+                <h1 id="heroTitle" class="text-3xl sm:text-5xl font-black text-white leading-tight">Featured Content</h1>
+                <p id="heroDesc" class="text-slate-300 text-sm sm:text-base line-clamp-3 leading-relaxed">Explore top titles from the library.</p>
+                
+                <div class="flex items-center gap-3 pt-2">
+                    <button id="heroPlayBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 text-sm cursor-pointer transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Play Now
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Section Container -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-8 space-y-12">
+    <!-- Main Content Feed -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-8 space-y-8">
+        
+        <!-- Category Pills -->
+        <section>
+            <div class="flex items-center gap-2 overflow-x-auto pb-2">
+                <button onclick="filterGenre('all', event)" class="category-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">All Media</button>
+                <button onclick="filterGenre('28', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">Action</button>
+                <button onclick="filterGenre('35', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">Comedy</button>
+                <button onclick="filterGenre('18', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">Drama</button>
+                <button onclick="filterGenre('878', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">Sci-Fi</button>
+                <button onclick="filterGenre('27', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer">Horror</button>
+            </div>
+        </section>
 
-        <!-- Anime Section -->
-        <main id="anime-section" class="space-y-12">
-            <section>
-                <div class="flex items-center justify-between mb-6">
-                    <h2 id="animeHeader" class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Trending Anime
-                    </h2>
-                </div>
-                <div id="animeTrendingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
+        <!-- Marvel Cinematic Universe Row -->
+        <section id="marvelSection">
+            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Marvel Cinematic Universe (Release Order)
+            </h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left" onclick="scrollCarousel('marvelGrid', -600)">❮</button>
+                <div id="marvelGrid" class="carousel-row"></div>
+                <button class="carousel-btn right" onclick="scrollCarousel('marvelGrid', 600)">❯</button>
+            </div>
+        </section>
 
-            <section id="animePopularSection">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Popular Anime
-                    </h2>
-                </div>
-                <div id="animePopularGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
-        </main>
+        <!-- Trending Row -->
+        <section>
+            <h2 id="trendingHeader" class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Trending Now
+            </h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left" onclick="scrollCarousel('trendingGrid', -600)">❮</button>
+                <div id="trendingGrid" class="carousel-row"></div>
+                <button class="carousel-btn right" onclick="scrollCarousel('trendingGrid', 600)">❯</button>
+            </div>
+        </section>
 
-        <!-- Movie Section -->
-        <main id="movie-section" class="space-y-12 hidden">
-            <!-- Genre Filter Pills -->
-            <section id="movieCategorySection">
-                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-                    <button onclick="filterMovieGenre('all', event)" class="category-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">All</button>
-                    <button onclick="filterMovieGenre('28', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Action</button>
-                    <button onclick="filterMovieGenre('35', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Comedy</button>
-                    <button onclick="filterMovieGenre('18', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Drama</button>
-                    <button onclick="filterMovieGenre('878', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Sci-Fi</button>
-                    <button onclick="filterMovieGenre('27', event)" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 whitespace-nowrap transition-all">Horror</button>
-                </div>
-            </section>
+        <!-- Anime Hits Row -->
+        <section id="animeRowSection">
+            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Anime Hits
+            </h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left" onclick="scrollCarousel('animeGrid', -600)">❮</button>
+                <div id="animeGrid" class="carousel-row"></div>
+                <button class="carousel-btn right" onclick="scrollCarousel('animeGrid', 600)">❯</button>
+            </div>
+        </section>
 
-            <section>
-                <div class="flex items-center justify-between mb-6">
-                    <h2 id="movieHeader" class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Trending Movies
-                    </h2>
-                </div>
-                <div id="movieTrendingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
+        <!-- Popular Movies Row -->
+        <section id="popularMoviesSection">
+            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Popular Movies
+            </h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left" onclick="scrollCarousel('moviesGrid', -600)">❮</button>
+                <div id="moviesGrid" class="carousel-row"></div>
+                <button class="carousel-btn right" onclick="scrollCarousel('moviesGrid', 600)">❯</button>
+            </div>
+        </section>
 
-            <section class="movie-extra-section">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Popular Movies
-                    </h2>
-                </div>
-                <div id="moviePopularGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
-
-            <section class="movie-extra-section">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Pinoy Movies
-                    </h2>
-                </div>
-                <div id="moviePinoyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
-
-            <section class="movie-extra-section">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span>
-                        Horror Movies
-                    </h2>
-                </div>
-                <div id="movieHorrorGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-            </section>
-        </main>
-
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-        <span id="toastMessage" class="text-sm font-semibold">Action completed</span>
     </div>
 
     <script>
@@ -278,132 +300,126 @@
         const TMDB_BASE_URL = "https://api.themoviedb.org/3";
         const TMDB_IMG_URL = "https://image.tmdb.org/t/p/w500";
 
+        const MARVEL_RELEASE_ORDER_IDS = [
+            1726, 1724, 10138, 10195, 1771, 24428, 68721, 76338, 100402, 118340, 
+            99861, 102899, 271110, 284052, 283995, 315635, 284053, 284054, 299536, 
+            363088, 299537, 299534, 429617, 497698, 566525, 524434, 634649, 453395, 
+            616037, 505642, 640146, 447365, 609681, 533535
+        ];
+
         let watchlist = JSON.parse(localStorage.getItem('clique_watchlist')) || [];
-        let currentSection = 'anime';
+        let currentMediaId = null;
+        let currentMediaType = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadAnimeData();
-            loadMovieData();
+            initData();
             updateWatchlistUI();
             setupSearch();
         });
 
-        function switchSection(section) {
-            currentSection = section;
-            const animeBtn = document.getElementById('animeTab');
-            const moviesBtn = document.getElementById('moviesTab');
-            
-            if (section === 'anime') {
-                animeBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md";
-                moviesBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
-                document.getElementById('anime-section').classList.remove('hidden');
-                document.getElementById('movie-section').classList.add('hidden');
-                resetAnimeGrids();
-            } else {
-                moviesBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-red-600 shadow-md";
-                animeBtn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
-                document.getElementById('anime-section').classList.add('hidden');
-                document.getElementById('movie-section').classList.remove('hidden');
-                resetMovieGrids();
+        function scrollCarousel(gridId, offset) {
+            const container = document.getElementById(gridId);
+            if(container) {
+                container.scrollBy({ left: offset, behavior: 'smooth' });
             }
-            document.getElementById('searchInput').value = '';
+        }
+
+        async function initData() {
+            await Promise.all([loadMarvelData(), loadTrendingData(), loadAnimeData(), loadMovieData()]);
         }
 
         async function fetchTMDB(endpoint, params = '') {
             try {
                 const response = await fetch(`${TMDB_BASE_URL}${endpoint}?api_key=${TMDB_API_KEY}${params}`);
+                if (!response.ok) throw new Error("TMDB Response Error");
                 return await response.json();
             } catch (err) {
-                console.error("TMDB Fetch Error:", err);
+                console.warn("TMDB Fetch Fallback:", endpoint);
+                return null;
+            }
+        }
+
+        async function loadMarvelData() {
+            const marvelMovies = await Promise.all(
+                MARVEL_RELEASE_ORDER_IDS.map(id => fetchTMDB(`/movie/${id}`))
+            );
+            const validMarvelMovies = marvelMovies.filter(m => m && m.id);
+            if (validMarvelMovies.length) {
+                renderRow('marvelGrid', validMarvelMovies, 'movie');
+            }
+        }
+
+        async function loadTrendingData() {
+            const trending = await fetchTMDB('/trending/all/week');
+            if (trending && trending.results?.length) {
+                updateHero(trending.results[0]);
+                renderRow('trendingGrid', trending.results);
+            }
+        }
+
+        async function loadAnimeData() {
+            const animeTrending = await fetchTMDB('/discover/tv', '&with_genres=16&with_original_language=ja');
+            if (animeTrending && animeTrending.results?.length) {
+                renderRow('animeGrid', animeTrending.results, 'tv');
             }
         }
 
         async function loadMovieData() {
-            const trending = await fetchTMDB('/trending/movie/week');
             const popular = await fetchTMDB('/movie/popular');
-            const pinoy = await fetchTMDB('/discover/movie', '&with_origin_country=PH');
-            const horror = await fetchTMDB('/discover/movie', '&with_genres=27');
-
-            if (trending?.results?.length) {
-                updateHero(trending.results[0]);
-                renderMovieGrid('movieTrendingGrid', trending.results);
+            if (popular && popular.results?.length) {
+                renderRow('moviesGrid', popular.results, 'movie');
             }
-            if (popular?.results) renderMovieGrid('moviePopularGrid', popular.results);
-            if (pinoy?.results) renderMovieGrid('moviePinoyGrid', pinoy.results);
-            if (horror?.results) renderMovieGrid('movieHorrorGrid', horror.results);
-        }
-
-        async function loadAnimeData() {
-            const animeTrending = await fetchTMDB('/discover/tv', '&with_keywords=210024|287501'); 
-            const animePopular = await fetchTMDB('/discover/tv', '&with_genres=16&with_original_language=ja');
-
-            if (animeTrending?.results) renderAnimeGrid('animeTrendingGrid', animeTrending.results);
-            if (animePopular?.results) renderAnimeGrid('animePopularGrid', animePopular.results);
         }
 
         function updateHero(item) {
+            if(!item) return;
             const heroBg = document.getElementById('heroBg');
             const heroTitle = document.getElementById('heroTitle');
             const heroBadge = document.getElementById('heroBadge');
             const heroDesc = document.getElementById('heroDesc');
+            const heroPlayBtn = document.getElementById('heroPlayBtn');
 
-            if(item && item.backdrop_path) {
+            const type = item.title ? 'movie' : 'tv';
+
+            if(item.backdrop_path) {
                 heroBg.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
             }
-            if(item) {
-                heroTitle.textContent = item.title || item.name || "Featured Title";
-                heroBadge.textContent = (item.release_date || item.first_air_date || '2026').substring(0, 4);
-                heroDesc.textContent = item.overview || 'No overview available.';
-            }
+            heroTitle.textContent = item.title || item.name || "Featured Title";
+            heroBadge.textContent = (item.release_date || item.first_air_date || '2026').substring(0, 4);
+            heroDesc.textContent = item.overview || 'No overview available.';
+
+            heroPlayBtn.onclick = () => openMediaModal(item.id, type);
         }
 
-        function renderMovieGrid(containerId, movies) {
+        function renderRow(containerId, items, defaultType = 'movie') {
             const container = document.getElementById(containerId);
-            if(container) {
-                container.innerHTML = movies.map(movie => createMediaCard(movie, 'movie')).join('');
+            if(container && items) {
+                container.innerHTML = items.map(item => createNetflixCard(item, defaultType)).join('');
             }
         }
 
-        function renderAnimeGrid(containerId, shows) {
-            const container = document.getElementById(containerId);
-            if(container) {
-                container.innerHTML = shows.map(show => createMediaCard(show, 'tv')).join('');
-            }
-        }
-
-        function createMediaCard(item, type) {
+        function createNetflixCard(item, type) {
             const title = item.title || item.name || "Untitled";
-            const poster = item.poster_path ? `${TMDB_IMG_URL}${item.poster_path}` : 'https://via.placeholder.com/500x750';
+            const poster = item.poster_path ? `${TMDB_IMG_URL}${item.poster_path}` : 'https://placehold.co/500x750/1e293b/ffffff?text=No+Poster';
             const year = (item.release_date || item.first_air_date || '').substring(0, 4);
             const inWatchlist = watchlist.some(w => w.id === item.id);
             const safeTitle = title.replace(/'/g, "\\'");
             const actualType = item.media_type || type;
 
             return `
-                <div class="media-card group relative bg-slate-800/80 rounded-2xl overflow-hidden cursor-pointer border border-slate-700/50 hover:border-red-500/50" onclick="openMediaModal(${item.id}, '${actualType}')">
-                    <div class="aspect-[2/3] w-full overflow-hidden relative">
-                        <img src="${poster}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                        
-                        <!-- Overlay on Hover -->
+                <div class="netflix-card bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700/50" onclick="openMediaModal(${item.id}, '${actualType}')">
+                    <div class="aspect-[2/3] w-full relative">
+                        <img src="${poster}" alt="${title}" class="w-full h-full object-cover" loading="lazy">
                         <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-between p-4">
                             <div class="flex justify-end">
-                                <button class="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-red-600 transition-colors" onclick="event.stopPropagation(); toggleWatchlistItems(${item.id}, '${safeTitle}', '${poster}')">
-                                    <svg class="w-4 h-4" fill="${inWatchlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                                    </svg>
+                                <button class="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-red-600" onclick="event.stopPropagation(); toggleWatchlistItems(${item.id}, '${safeTitle}', '${poster}')">
+                                    <svg class="w-4 h-4" fill="${inWatchlist ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                                 </button>
                             </div>
-
-                            <div class="flex justify-center items-center my-auto">
-                                <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                                    <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
-                            </div>
-
                             <div>
                                 <span class="inline-block px-2 py-0.5 bg-red-600/90 text-white text-[10px] font-bold rounded uppercase mb-1">${actualType}</span>
                                 <h4 class="text-sm font-bold text-white truncate">${title}</h4>
-                                <p class="text-xs text-slate-400 font-medium">${year}</p>
+                                <p class="text-xs text-slate-400">${year}</p>
                             </div>
                         </div>
                     </div>
@@ -413,165 +429,127 @@
 
         async function openMediaModal(id, type) {
             const modal = document.getElementById('mediaModal');
-            const videoBox = document.getElementById('videoBox');
-            const title = document.getElementById('modalTitle');
-            const desc = document.getElementById('modalDesc');
-            const meta = document.getElementById('modalMeta');
+            const seriesControls = document.getElementById('seriesControls');
 
-            const mediaType = (type === 'tv' || type === 'anime') ? 'tv' : 'movie';
-
+            currentMediaId = id;
+            currentMediaType = (type === 'tv' || type === 'anime') ? 'tv' : 'movie';
+            
             modal.classList.remove('opacity-0', 'pointer-events-none');
-            videoBox.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 font-medium">Loading Player...</div>';
 
-            const details = await fetchTMDB(`/${mediaType}/${id}`);
+            const details = await fetchTMDB(`/${currentMediaType}/${id}`);
 
-            if (details) {
-                title.textContent = details.title || details.name;
-                desc.textContent = details.overview || "No overview available.";
-                meta.innerHTML = `
-                    <span class="text-amber-400 flex items-center gap-1">★ ${details.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>
-                    <span>•</span>
-                    <span>${details.release_date || details.first_air_date || 'N/A'}</span>
-                `;
+            document.getElementById('modalTitle').textContent = details?.title || details?.name || "Title";
+            document.getElementById('modalDesc').textContent = details?.overview || "No description available.";
+            document.getElementById('modalMeta').innerHTML = `<span>Rating: ⭐ ${details?.vote_average ? details.vote_average.toFixed(1) : 'N/A'}</span>`;
+
+            if (currentMediaType === 'tv') {
+                seriesControls.classList.remove('hidden');
+                populateSeasons(details?.seasons || []);
+            } else {
+                seriesControls.classList.add('hidden');
+                loadMoviePlayer(id);
             }
+        }
 
-            let embedUrl = mediaType === 'movie' ? `https://vidfast.vc/movie/${id}?autoPlay=true` : `https://vidfast.vc/tv/${id}/1/1?autoPlay=true`;
+        function populateSeasons(seasons) {
+            const seasonSelect = document.getElementById('seasonSelect');
+            const validSeasons = seasons.filter(s => s.season_number > 0);
+            
+            seasonSelect.innerHTML = validSeasons.length 
+                ? validSeasons.map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`).join('')
+                : `<option value="1">Season 1</option>`;
 
-            videoBox.innerHTML = `
-                <iframe 
-                    src="${embedUrl}" 
-                    frameborder="0" 
-                    allow="autoplay; encrypted-media; fullscreen" 
-                    allowfullscreen
-                    class="rounded-t-2xl">
-                </iframe>
-            `;
+            onSeasonChange();
+        }
+
+        async function onSeasonChange() {
+            const seasonNum = document.getElementById('seasonSelect').value || 1;
+            const episodeSelect = document.getElementById('episodeSelect');
+
+            const seasonDetails = await fetchTMDB(`/tv/${currentMediaId}/season/${seasonNum}`);
+            const count = seasonDetails?.episodes?.length || 12;
+
+            episodeSelect.innerHTML = Array.from({ length: count }, (_, i) => `<option value="${i + 1}">Episode ${i + 1}</option>`).join('');
+            updatePlayerEpisode();
+        }
+
+        function updatePlayerEpisode() {
+            const season = document.getElementById('seasonSelect').value || 1;
+            const episode = document.getElementById('episodeSelect').value || 1;
+            document.getElementById('videoBox').innerHTML = `<iframe src="https://vidfast.vc/tv/${currentMediaId}/${season}/${episode}?autoPlay=true" frameborder="0" allowfullscreen class="rounded-t-2xl"></iframe>`;
+        }
+
+        function loadMoviePlayer(id) {
+            document.getElementById('videoBox').innerHTML = `<iframe src="https://vidfast.vc/movie/${id}?autoPlay=true" frameborder="0" allowfullscreen class="rounded-t-2xl"></iframe>`;
         }
 
         function closeModal() {
-            const modal = document.getElementById('mediaModal');
-            const videoBox = document.getElementById('videoBox');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            videoBox.innerHTML = '';
+            document.getElementById('mediaModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('videoBox').innerHTML = '';
         }
 
-        async function filterMovieGenre(genreId, evt) {
+        async function filterGenre(genreId, evt) {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             if(evt) evt.target.classList.add('active');
 
-            const endpoint = genreId === 'all' ? '/movie/popular' : `/discover/movie`;
+            const endpoint = genreId === 'all' ? '/trending/all/week' : `/discover/movie`;
             const param = genreId === 'all' ? '' : `&with_genres=${genreId}`;
             const filtered = await fetchTMDB(endpoint, param);
 
             if (filtered?.results) {
-                renderMovieGrid('movieTrendingGrid', filtered.results);
+                renderRow('trendingGrid', filtered.results);
             }
         }
 
         function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            if(!searchInput) return;
-
-            searchInput.addEventListener('input', async (e) => {
+            document.getElementById('searchInput').addEventListener('input', async (e) => {
                 const query = e.target.value.trim();
-                
                 if (query.length > 2) {
-                    const searchRes = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}`);
-                    
-                    if (searchRes?.results) {
-                        if (currentSection === 'anime') {
-                            document.getElementById('animeHeader').textContent = `Search Results for "${query}"`;
-                            document.getElementById('animePopularSection').classList.add('hidden');
-                            const animeResults = searchRes.results.filter(r => r.media_type === 'tv' || r.media_type === 'movie');
-                            renderAnimeGrid('animeTrendingGrid', animeResults);
-                        } else {
-                            document.getElementById('movieHeader').textContent = `Search Results for "${query}"`;
-                            document.querySelectorAll('.movie-extra-section').forEach(sec => sec.classList.add('hidden'));
-                            const movieResults = searchRes.results.filter(r => r.media_type === 'movie');
-                            renderMovieGrid('movieTrendingGrid', movieResults);
-                        }
+                    const res = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}`);
+                    if (res?.results) {
+                        document.getElementById('trendingHeader').textContent = `Search Results for "${query}"`;
+                        renderRow('trendingGrid', res.results);
                     }
                 } else if (query.length === 0) {
-                    if (currentSection === 'anime') {
-                        resetAnimeGrids();
-                    } else {
-                        resetMovieGrids();
-                    }
+                    document.getElementById('trendingHeader').textContent = "Trending Now";
+                    loadTrendingData();
                 }
             });
-        }
-
-        function resetAnimeGrids() {
-            document.getElementById('animeHeader').textContent = "Trending Anime";
-            document.getElementById('animePopularSection').classList.remove('hidden');
-            loadAnimeData();
-        }
-
-        function resetMovieGrids() {
-            document.getElementById('movieHeader').textContent = "Trending Movies";
-            document.querySelectorAll('.movie-extra-section').forEach(sec => sec.classList.remove('hidden'));
-            loadMovieData();
         }
 
         function toggleWatchlistItems(id, title, image) {
             const index = watchlist.findIndex(item => item.id === id);
             if (index > -1) {
                 watchlist.splice(index, 1);
-                showToast('Removed from Watchlist');
             } else {
-                watchlist.push({ id, title: title || 'Title', image: image || '' });
-                showToast('Added to Watchlist');
+                watchlist.push({ id, title, image });
             }
             localStorage.setItem('clique_watchlist', JSON.stringify(watchlist));
             updateWatchlistUI();
-            loadMovieData();
-            loadAnimeData();
         }
 
         function updateWatchlistUI() {
             const count = document.getElementById('watchlistCount');
             const content = document.getElementById('watchlistContent');
-
             if(count) {
                 count.textContent = watchlist.length;
                 count.classList.toggle('hidden', watchlist.length === 0);
             }
-
             if(content) {
-                if (watchlist.length === 0) {
-                    content.innerHTML = `<div class="text-center py-12 text-slate-500 font-medium">Your watchlist is empty.</div>`;
-                } else {
-                    content.innerHTML = watchlist.map(item => `
-                        <div class="flex items-center gap-4 bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
-                            <img src="${item.image}" class="w-12 h-16 object-cover rounded-lg flex-shrink-0" alt="${item.title}">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-semibold text-white truncate">${item.title}</h4>
-                            </div>
-                            <button onclick="toggleWatchlistItems(${item.id})" class="p-2 text-slate-400 hover:text-red-500 transition-colors">✕</button>
-                        </div>
-                    `).join('');
-                }
+                content.innerHTML = watchlist.map(item => `
+                    <div class="flex items-center gap-4 bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                        <img src="${item.image}" class="w-12 h-16 object-cover rounded-lg" alt="${item.title}">
+                        <div class="flex-1 min-w-0"><h4 class="text-sm font-semibold text-white truncate">${item.title}</h4></div>
+                        <button onclick="toggleWatchlistItems(${item.id})" class="p-2 text-slate-400 hover:text-red-500">✕</button>
+                    </div>
+                `).join('');
             }
         }
 
         function toggleWatchlist() {
-            const sidebar = document.getElementById('watchlistSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            sidebar.classList.toggle('translate-x-full');
-            overlay.classList.toggle('opacity-0');
-            overlay.classList.toggle('pointer-events-none');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            if(toast) {
-                document.getElementById('toastMessage').textContent = message;
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 3000);
-            }
+            document.getElementById('watchlistSidebar').classList.toggle('translate-x-full');
+            document.getElementById('sidebarOverlay').classList.toggle('opacity-0');
+            document.getElementById('sidebarOverlay').classList.toggle('pointer-events-none');
         }
     </script>
 </body>
