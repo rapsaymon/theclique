@@ -40,7 +40,6 @@
                         linear-gradient(90deg, rgba(11,15,23,0.9) 0%, rgba(11,15,23,0.4) 50%, rgba(11,15,23,0.8) 100%);
         }
 
-        /* Carousel Row Container & Buttons */
         .carousel-wrapper {
             position: relative;
         }
@@ -53,7 +52,6 @@
             padding: 12px 0 24px 0;
         }
 
-        /* Visible styled horizontal scrollbar */
         .carousel-row::-webkit-scrollbar {
             height: 6px;
         }
@@ -149,9 +147,14 @@
                 </a>
 
                 <div class="flex items-center gap-4">
-                    <div class="relative w-48 sm:w-72">
+                    <!-- Search Container -->
+                    <div id="searchContainer" class="relative w-48 sm:w-80">
                         <input type="text" id="searchInput" placeholder="Search movies, anime..." class="w-full bg-slate-900 border border-slate-700/60 focus:border-red-500 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-400 focus:outline-none">
                         <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+
+                        <!-- Search Dropdown Box -->
+                        <div id="searchResultsDropdown" class="hidden absolute left-0 right-0 top-12 bg-slate-900/95 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-md overflow-hidden z-50 max-h-[420px] overflow-y-auto divide-y divide-slate-800">
+                        </div>
                     </div>
 
                     <button onclick="toggleWatchlist()" class="relative p-2.5 rounded-xl bg-slate-900 border border-slate-700/60 text-slate-200 hover:text-white cursor-pointer">
@@ -207,6 +210,21 @@
         </div>
     </div>
 
+    <!-- "See All" Modal -->
+    <div id="seeAllModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <h2 id="seeAllModalTitle" class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Section Titles
+                </h2>
+                <button onclick="closeSeeAllModal()" class="w-9 h-9 rounded-full bg-slate-800 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 transition-colors cursor-pointer">✕</button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="seeAllGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Header Banner -->
     <header id="heroSection" class="relative w-full min-h-[450px] sm:min-h-[550px] flex items-end pt-20">
         <div id="heroBg" class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 bg-slate-900">
@@ -247,9 +265,14 @@
 
         <!-- Marvel Cinematic Universe Row -->
         <section id="marvelSection">
-            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Marvel Cinematic Universe (Release Order)
-            </h2>
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Marvel Cinematic Universe
+                </h2>
+                <button onclick="openSeeAllModal('Marvel Cinematic Universe', sectionData.marvel, 'movie')" class="text-xs sm:text-sm font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors cursor-pointer">
+                    See All ❯
+                </button>
+            </div>
             <div class="carousel-wrapper">
                 <button class="carousel-btn left" onclick="scrollCarousel('marvelGrid', -600)">❮</button>
                 <div id="marvelGrid" class="carousel-row"></div>
@@ -259,9 +282,14 @@
 
         <!-- Trending Row -->
         <section>
-            <h2 id="trendingHeader" class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Trending Now
-            </h2>
+            <div class="flex items-center justify-between mb-2">
+                <h2 id="trendingHeader" class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Trending Now
+                </h2>
+                <button onclick="openSeeAllModal('Trending Now', sectionData.trending, 'movie')" class="text-xs sm:text-sm font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors cursor-pointer">
+                    See All ❯
+                </button>
+            </div>
             <div class="carousel-wrapper">
                 <button class="carousel-btn left" onclick="scrollCarousel('trendingGrid', -600)">❮</button>
                 <div id="trendingGrid" class="carousel-row"></div>
@@ -271,9 +299,14 @@
 
         <!-- Anime Hits Row -->
         <section id="animeRowSection">
-            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Anime Hits
-            </h2>
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Anime Hits
+                </h2>
+                <button onclick="openSeeAllModal('Anime Hits', sectionData.anime, 'tv')" class="text-xs sm:text-sm font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors cursor-pointer">
+                    See All ❯
+                </button>
+            </div>
             <div class="carousel-wrapper">
                 <button class="carousel-btn left" onclick="scrollCarousel('animeGrid', -600)">❮</button>
                 <div id="animeGrid" class="carousel-row"></div>
@@ -283,9 +316,14 @@
 
         <!-- Popular Movies Row -->
         <section id="popularMoviesSection">
-            <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Popular Movies
-            </h2>
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> Popular Movies
+                </h2>
+                <button onclick="openSeeAllModal('Popular Movies', sectionData.movies, 'movie')" class="text-xs sm:text-sm font-semibold text-slate-400 hover:text-red-500 flex items-center gap-1 transition-colors cursor-pointer">
+                    See All ❯
+                </button>
+            </div>
             <div class="carousel-wrapper">
                 <button class="carousel-btn left" onclick="scrollCarousel('moviesGrid', -600)">❮</button>
                 <div id="moviesGrid" class="carousel-row"></div>
@@ -300,12 +338,51 @@
         const TMDB_BASE_URL = "https://api.themoviedb.org/3";
         const TMDB_IMG_URL = "https://image.tmdb.org/t/p/w500";
 
+        // MCU Movies in exact release order from Iron Man (2008) up to Captain America: Brave New World (2025)
         const MARVEL_RELEASE_ORDER_IDS = [
-            1726, 1724, 10138, 10195, 1771, 24428, 68721, 76338, 100402, 118340, 
-            99861, 102899, 271110, 284052, 283995, 315635, 284053, 284054, 299536, 
-            363088, 299537, 299534, 429617, 497698, 566525, 524434, 634649, 453395, 
-            616037, 505642, 640146, 447365, 609681, 533535
+            1726,   // 1. Iron Man (2008)
+            1724,   // 2. The Incredible Hulk (2008)
+            10138,  // 3. Iron Man 2 (2010)
+            10195,  // 4. Thor (2011)
+            1771,   // 5. Captain America: The First Avenger (2011)
+            24428,  // 6. The Avengers (2012)
+            68721,  // 7. Iron Man 3 (2013)
+            76338,  // 8. Thor: The Dark World (2013)
+            100402, // 9. Captain America: The Winter Soldier (2014)
+            118340, // 10. Guardians of the Galaxy (2014)
+            99861,  // 11. Avengers: Age of Ultron (2015)
+            102899, // 12. Ant-Man (2015)
+            271110, // 13. Captain America: Civil War (2016)
+            284052, // 14. Doctor Strange (2016)
+            283995, // 15. Guardians of the Galaxy Vol. 2 (2017)
+            315635, // 16. Spider-Man: Homecoming (2017)
+            284053, // 17. Thor: Ragnarok (2017)
+            284054, // 18. Black Panther (2018)
+            299536, // 19. Avengers: Infinity War (2018)
+            363088, // 20. Ant-Man and the Wasp (2018)
+            299537, // 21. Captain Marvel (2019)
+            299534, // 22. Avengers: Endgame (2019)
+            429617, // 23. Spider-Man: Far From Home (2019)
+            497698, // 24. Black Widow (2021)
+            566525, // 25. Shang-Chi and the Legend of the Ten Rings (2021)
+            524434, // 26. Eternals (2021)
+            634649, // 27. Spider-Man: No Way Home (2021)
+            453395, // 28. Doctor Strange in the Multiverse of Madness (2022)
+            616037, // 29. Thor: Love and Thunder (2022)
+            505642, // 30. Black Panther: Wakanda Forever (2022)
+            640146, // 31. Ant-Man and the Wasp: Quantumania (2023)
+            447365, // 32. Guardians of the Galaxy Vol. 3 (2023)
+            609681, // 33. The Marvels (2023)
+            533535, // 34. Deadpool & Wolverine (2024)
+            822119  // 35. Captain America: Brave New World (2025)
         ];
+
+        let sectionData = {
+            marvel: [],
+            trending: [],
+            anime: [],
+            movies: []
+        };
 
         let watchlist = JSON.parse(localStorage.getItem('clique_watchlist')) || [];
         let currentMediaId = null;
@@ -331,10 +408,10 @@
         async function fetchTMDB(endpoint, params = '') {
             try {
                 const response = await fetch(`${TMDB_BASE_URL}${endpoint}?api_key=${TMDB_API_KEY}${params}`);
-                if (!response.ok) throw new Error("TMDB Response Error");
+                if (!response.ok) return null;
                 return await response.json();
             } catch (err) {
-                console.warn("TMDB Fetch Fallback:", endpoint);
+                console.warn("TMDB Fetch Error:", endpoint);
                 return null;
             }
         }
@@ -343,8 +420,10 @@
             const marvelMovies = await Promise.all(
                 MARVEL_RELEASE_ORDER_IDS.map(id => fetchTMDB(`/movie/${id}`))
             );
-            const validMarvelMovies = marvelMovies.filter(m => m && m.id);
+            // Strict filter: keep only valid movie responses that belong to Marvel
+            const validMarvelMovies = marvelMovies.filter(m => m && m.id && m.title);
             if (validMarvelMovies.length) {
+                sectionData.marvel = validMarvelMovies;
                 renderRow('marvelGrid', validMarvelMovies, 'movie');
             }
         }
@@ -352,6 +431,7 @@
         async function loadTrendingData() {
             const trending = await fetchTMDB('/trending/all/week');
             if (trending && trending.results?.length) {
+                sectionData.trending = trending.results;
                 updateHero(trending.results[0]);
                 renderRow('trendingGrid', trending.results);
             }
@@ -360,6 +440,7 @@
         async function loadAnimeData() {
             const animeTrending = await fetchTMDB('/discover/tv', '&with_genres=16&with_original_language=ja');
             if (animeTrending && animeTrending.results?.length) {
+                sectionData.anime = animeTrending.results;
                 renderRow('animeGrid', animeTrending.results, 'tv');
             }
         }
@@ -367,6 +448,7 @@
         async function loadMovieData() {
             const popular = await fetchTMDB('/movie/popular');
             if (popular && popular.results?.length) {
+                sectionData.movies = popular.results;
                 renderRow('moviesGrid', popular.results, 'movie');
             }
         }
@@ -409,7 +491,7 @@
             return `
                 <div class="netflix-card bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700/50" onclick="openMediaModal(${item.id}, '${actualType}')">
                     <div class="aspect-[2/3] w-full relative">
-                        <img src="${poster}" alt="${title}" class="w-full h-full object-cover" loading="lazy">
+                        <img src="${poster}" alt="${title}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://placehold.co/500x750/1e293b/ffffff?text=No+Poster'">
                         <div class="card-overlay absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-between p-4">
                             <div class="flex justify-end">
                                 <button class="p-2 rounded-full bg-black/60 border border-white/20 text-white hover:bg-red-600" onclick="event.stopPropagation(); toggleWatchlistItems(${item.id}, '${safeTitle}', '${poster}')">
@@ -425,6 +507,23 @@
                     </div>
                 </div>
             `;
+        }
+
+        function openSeeAllModal(title, items, defaultType = 'movie') {
+            const modal = document.getElementById('seeAllModal');
+            const modalTitle = document.getElementById('seeAllModalTitle');
+            const grid = document.getElementById('seeAllGrid');
+
+            modalTitle.innerHTML = `<span class="w-2 h-6 bg-red-600 rounded-full inline-block"></span> ${title}`;
+            grid.innerHTML = (items && items.length) 
+                ? items.map(item => createNetflixCard(item, defaultType)).join('') 
+                : `<div class="col-span-full text-center text-slate-400 py-12 font-medium">No items available.</div>`;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeSeeAllModal() {
+            document.getElementById('seeAllModal').classList.add('opacity-0', 'pointer-events-none');
         }
 
         async function openMediaModal(id, type) {
@@ -497,24 +596,67 @@
             const filtered = await fetchTMDB(endpoint, param);
 
             if (filtered?.results) {
+                sectionData.trending = filtered.results;
                 renderRow('trendingGrid', filtered.results);
             }
         }
 
         function setupSearch() {
-            document.getElementById('searchInput').addEventListener('input', async (e) => {
+            const searchInput = document.getElementById('searchInput');
+            const dropdown = document.getElementById('searchResultsDropdown');
+
+            searchInput.addEventListener('input', async (e) => {
                 const query = e.target.value.trim();
-                if (query.length > 2) {
+                
+                if (query.length > 1) {
                     const res = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}`);
-                    if (res?.results) {
-                        document.getElementById('trendingHeader').textContent = `Search Results for "${query}"`;
-                        renderRow('trendingGrid', res.results);
+                    
+                    if (res?.results?.length) {
+                        dropdown.classList.remove('hidden');
+                        dropdown.innerHTML = res.results.slice(0, 7).map(item => {
+                            const title = item.title || item.name || 'Untitled';
+                            const year = (item.release_date || item.first_air_date || '').substring(0, 4);
+                            const poster = item.poster_path ? `${TMDB_IMG_URL}${item.poster_path}` : 'https://placehold.co/100x150/1e293b/ffffff?text=No+Img';
+                            const type = item.media_type || (item.title ? 'movie' : 'tv');
+
+                            return `
+                                <div class="flex items-center gap-3 p-2.5 hover:bg-slate-800/80 cursor-pointer transition-colors" onclick="openMediaModal(${item.id}, '${type}'); closeSearchDropdown();">
+                                    <img src="${poster}" class="w-10 h-14 object-cover rounded-lg flex-shrink-0" alt="${title}">
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-xs font-bold text-white truncate">${title}</h4>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 bg-red-600/90 text-white rounded">${type}</span>
+                                            <span class="text-[11px] font-semibold text-slate-400">${year}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        dropdown.classList.remove('hidden');
+                        dropdown.innerHTML = `<div class="p-4 text-xs font-semibold text-slate-400 text-center">No results found for "${query}"</div>`;
                     }
-                } else if (query.length === 0) {
-                    document.getElementById('trendingHeader').textContent = "Trending Now";
-                    loadTrendingData();
+                } else {
+                    dropdown.classList.add('hidden');
+                    dropdown.innerHTML = '';
                 }
             });
+
+            document.addEventListener('click', (e) => {
+                const searchContainer = document.getElementById('searchContainer');
+                if (!searchContainer.contains(e.target)) {
+                    closeSearchDropdown();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeSearchDropdown();
+            });
+        }
+
+        function closeSearchDropdown() {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
         }
 
         function toggleWatchlistItems(id, title, image) {
